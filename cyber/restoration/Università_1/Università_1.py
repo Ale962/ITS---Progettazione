@@ -223,7 +223,7 @@ class Persona:
             self._data_iscrizione = data_iscrizione
             if corso_superato:
                 for c, v in corso_superato.items():
-                    self._add_corso_superato(c, v)
+                    self.add_corso_superato(c, v)
             if facolta:
                 self.set_facolta(facolta)
             else:
