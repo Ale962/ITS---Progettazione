@@ -72,6 +72,8 @@ class Regione:
     def citta(self) -> list[Citta]:
         return self._citta
 
+    def nazione(self) -> Nazione:
+        return self._nazione
 
 
 class Nazione:
@@ -205,9 +207,10 @@ class Persona:
     _facolta: Facolta | None # noto alla nascita
     _insegnamenti: list[Insegnamento] | None # non noto alla nascita
     _luogo_di_nascita: dict[str, Citta|Regione|Nazione] # immutabile, noto alla nascita
+    _citta: Citta
     
 
-    def __init__(self, nome: str, cognome: str, codice_fiscale: str, is_studente: bool, is_professore: bool, citta: Citta, regione: Regione, nazione: Nazione, matricola: str | None = None, data_iscrizione: datetime | None = None, corso_superato: dict[Corso, Voto] | None = None, facolta: Facolta | None = None, insegnamenti: list[Insegnamento] | None = None):
+    def __init__(self, nome: str, cognome: str, codice_fiscale: str, is_studente: bool, is_professore: bool, citta: Citta, matricola: str | None = None, data_iscrizione: datetime | None = None, corso_superato: dict[Corso, Voto] | None = None, facolta: Facolta | None = None, insegnamenti: list[Insegnamento] | None = None):
         self.set_nome(nome)
         self.set_cognome(nome)
         self.set_codice_fiscale(codice_fiscale)
@@ -230,6 +233,9 @@ class Persona:
         if self._is_professore:
             if insegnamenti:
                 self.add_corso_insegnato(c for c in insegnamenti)
+        self._citta = citta
+        regione: Regione = citta.regione()
+        nazione: Nazione = regione.nazione()
         self._luogo_di_nascita = {'citta': citta, 'regione': regione, 'nazione': nazione}
 
     def set_nome(self, nome: str) -> None:
