@@ -1,5 +1,7 @@
+from __future__ import annotations
 from My_types import *
 from datetime import datetime, time
+
 
 class Citta:
     _nome: str # noto alla nascita
@@ -14,7 +16,7 @@ class Citta:
 
     def set_regione(self, regione: Regione) -> None:
         try:
-            if self._nome in regione._citta:
+            if self in regione.citta():
                 self._regione.remove_citta(self)
             else:
                 pass
@@ -28,7 +30,7 @@ class Citta:
     def nome(self) -> str:
         return self._nome
     
-    def regione(self)->str:
+    def regione(self)->Regione:
         return self._regione
     
 
@@ -41,7 +43,8 @@ class Regione:
         self.set_nome(nome)
         self._citta = []
         if citta:
-            self.add_citta(c for c in citta)
+            for c in citta:
+                self.add_citta(c)
         self.set_nazione(nazione)
 
     def add_citta(self, citta: Citta) -> None:
@@ -58,19 +61,19 @@ class Regione:
 
     def set_nazione(self, nazione: Nazione) -> None:
         try:
-            if self._nome in nazione._regioni:
+            if self in nazione._regioni:
                 nazione.remove_regione(self)
             else:
                 pass
         except IndexError:
             pass
-        if self._nome in nazione._regione:
+        if self._nome in nazione.regioni():
             raise ValueError('Non possono esistere due regione con lo stesso nome nella stessa nazione')
         self._nazione = nazione
         nazione.add_regione(self)
 
-    def citta(self) -> list[Citta]:
-        return self._citta
+    def citta(self) -> frozenset[Citta]:
+        return frozenset(self._citta)
 
     def nazione(self) -> Nazione:
         return self._nazione
@@ -84,7 +87,8 @@ class Nazione:
         self.set_nome(nome)
         self._regioni = []
         if regioni:
-            self._regioni.append(r for r in regioni)
+            for r in regioni:
+                self._regioni.append(r)
         
     def nome(self) -> str:
         return self._nome
@@ -98,15 +102,19 @@ class Nazione:
     def remove_regione(self, regione: Regione) -> None:
         self._regioni.remove(regione)
 
+    def regioni(self) -> frozenset[Regione]:
+        return frozenset(self._regioni)
+
 class Facolta:
     _nome: str # noto alla nascita
     _corsi: list[Corso] # possibilmente non noto alla nascita
 
-    def __init__(self, nome: str, corsi: Corso | None = None):
+    def __init__(self, nome: str, corsi: list[Corso] | None = None):
         self.set_nome(nome)
         self._corsi = []
         if corsi:
-            self.add_corso(c for c in corsi)
+            for c in corsi:
+                self.add_corso(c)
 
     def name(self) -> str:
         return self._nome
@@ -114,8 +122,8 @@ class Facolta:
     def set_nome(self, nome: str) -> None:
         self._nome = nome
 
-    def corsi(self) -> list[Corso]:
-        return self._corsi
+    def corsi(self) -> frozenset[Corso]:
+        return frozenset(self._corsi)
     
     def add_corso(self, corso: Corso) -> None:
         self._corsi.append(corso)
@@ -131,10 +139,11 @@ class Corso:
 
     def __init__(self, nome: str, facolta: Facolta, insegnamenti: list[Insegnamento]|None = None):
         self.set_nome(nome)
-        self._set_facolta(facolta)
+        self.set_facolta(facolta)
         self._insegnamenti = []
         if insegnamenti:
-            self.add_insegnamento(i for i in insegnamenti)
+            for i in insegnamenti:
+                self.add_insegnamento(i)
         
     def nome(self)->str:
         return self._nome
@@ -154,8 +163,8 @@ class Corso:
     def remove_insegnamento(self, insegnamento: Insegnamento) -> None:
         self._insegnamenti.remove(insegnamento)
 
-    def insegnamenti(self) -> list[Insegnamento]:
-        return self._insegnamenti
+    def insegnamenti(self) -> frozenset[Insegnamento]:
+        return frozenset(self._insegnamenti)
 
 class Insegnamento:
     _nome: str # noto alla nascita
@@ -165,11 +174,12 @@ class Insegnamento:
 
     def __init__(self, nome: str, codice: str, durata: time, corsi: list[Corso]):
         self.set_nome(nome)
-        self._codice(codice)
+        self._codice = codice
         self.set_durata(durata)
         self._corsi = []
         if corsi:
-            self.add_corso(c for c in corsi)
+            for c in corsi:
+                self.add_corso(c)
 
     def nome(self)->str:
         return self._nome
@@ -189,8 +199,8 @@ class Insegnamento:
     def remove_corso(self, corso: Corso) -> None:
         self._corsi.remove(corso)
 
-    def corsi(self) -> list[Corso]:
-        return self._corsi
+    def corsi(self) -> frozenset[Corso]:
+        return frozenset(self._corsi)
     
     def codice(self) -> str:
         return self._codice
@@ -212,7 +222,7 @@ class Persona:
 
     def __init__(self, nome: str, cognome: str, codice_fiscale: str, is_studente: bool, is_professore: bool, citta: Citta, matricola: str | None = None, data_iscrizione: datetime | None = None, corso_superato: dict[Corso, Voto] | None = None, facolta: Facolta | None = None, insegnamenti: list[Insegnamento] | None = None):
         self.set_nome(nome)
-        self.set_cognome(nome)
+        self.set_cognome(cognome)
         self.set_codice_fiscale(codice_fiscale)
         self.set_is_studente(is_studente)
         self.set_is_professore(is_professore)
@@ -232,7 +242,8 @@ class Persona:
                 raise ValueError('Lo studente deve avere per forza una matricola e una data di iscrizione alla facoltà')
         if self._is_professore:
             if insegnamenti:
-                self.add_corso_insegnato(c for c in insegnamenti)
+                for i in insegnamenti:
+                    self.add_corso_insegnato(i)
         self._citta = citta
         regione: Regione = citta.regione()
         nazione: Nazione = regione.nazione()
@@ -268,8 +279,9 @@ class Persona:
     def is_professore(self) -> bool:
         return self._is_professore
     
-    def luogo_di_nascita(self) -> dict:
-        return self._luogo_di_nascita
+    def luogo_di_nascita(self) -> frozenset[tuple]:
+        return frozenset(self._luogo_di_nascita.items())
+            
     
     def matricola(self) -> str:
         if self._is_studente:
@@ -302,15 +314,18 @@ class Persona:
         self._insegnamenti.remove(insegnamento)
 
     def corsi_superati(self) -> dict[Corso, Voto]:
-
+        list_corsi_superati = []
         if self._is_studente:
-            return self._corsi_superati
+            for c,v in self._corsi_superati.items():
+                corso: tuple = (c, v)
+                list_corsi_superati.append(corso)
+            return frozenset(list_corsi_superati)
         else:
             print(f'La persona {self._nome} {self._cognome} non è uno studente, impossibile accedere ai corsi superati')
 
-    def insegnamenti(self) -> list[Insegnamento]:
+    def insegnamenti(self) -> frozenset[Insegnamento]:
         if self._is_professore:
-            return self._insegnamenti
+            return frozenset(self._insegnamenti)
         else:
             print(f'La persona {self._nome} {self._cognome} non è un insegnante, impossibile accedere ai corsi insegnati')
 
@@ -320,3 +335,44 @@ class Persona:
         
     def set_facolta(self, facolta: Facolta) -> None:
         self._facolta = facolta
+
+
+if __name__ == '__main__':
+    italia = Nazione("Italia")
+    lombardia = Regione("Lombardia", italia)
+    milano = Citta("Milano", lombardia)
+
+    ingegneria = Facolta("Ingegneria")
+    corso_a = Corso("Programmazione", ingegneria)
+    ingegneria.add_corso(corso_a)
+
+    insegnamento_prog = Insegnamento("Python", "INF101", time(2, 0), [corso_a])
+    corso_a.add_insegnamento(insegnamento_prog)
+
+    studente = Persona(
+        nome="Mario",
+        cognome="Rossi",
+        codice_fiscale="RSSMRA80A01H501U",
+        is_studente=True,
+        is_professore=False,
+        citta=milano,
+        matricola="123456",
+        data_iscrizione=datetime(2022, 9, 1),
+        corso_superato={corso_a: Voto(28)},
+        facolta=ingegneria
+    )
+
+    professore = Persona(
+        nome="Luca",
+        cognome="Verdi",
+        codice_fiscale="VRDLUC70A01H501U",
+        is_studente=False,
+        is_professore=True,
+        citta=milano,
+        insegnamenti=[insegnamento_prog]
+    )
+
+    print(studente.nome(), studente.cognome(), studente.matricola())
+    print([c.nome() for c, v in studente.corsi_superati()])
+    print(professore.nome(), professore.cognome(), [i.nome() for i in professore.insegnamenti()])
+    print(milano.nome(), milano.regione().nome(), milano.regione().nazione().nome())
