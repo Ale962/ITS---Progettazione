@@ -7,42 +7,41 @@ from datetime import datetime
 
 class afferenza:
 
-    afferenza_link: dict[ _link, dict[Dipartimento, list[dict[Impiegato, datetime]]]] = {}
+    afferenza_link: list[dict[Dipartimento, list[Impiegato, datetime], list[_link]]] = {}
 
     @classmethod
     def add_link(cls, dipartimento: Dipartimento, impiegato: Impiegato, data_afferenza: datetime):
-        for x in list(cls.afferenza_link):
-            for i in cls.afferenza_link[x]['Impiegati']:
-                if i['Impiegato'] == impiegato:
-                    raise ValueError('Impiegato già presente in un altro Dipartimento')
+        for x in cls.afferenza_link:
+                for y in x.get('Impiegati'):
+                    if y == impiegato:
+                        raise ValueError('Impiegato già presente in un altro Dipartimento')
                 
         found: bool = False
-        for x in list(cls.afferenza_link):
-            if cls.afferenza_link[x]['Dipartimento'] == dipartimento:
-                d = cls.afferenza_link[x]
-                d['Impiegati'].append({'Impiegato': impiegato, 'Data afferenza': data_afferenza})
+        for x in cls.afferenza_link:
+            for y in x.get('Dipartimento'):
+                if y == dipartimento:
+                    l: __class__._link = __class__._link(impiegato, dipartimento, data_afferenza)
+                    ['Impiegati'].append({'Impiegato': impiegato, 'Data afferenza': data_afferenza})
+                    ['Link'].append(l)
                 found = True
         if not found:
             l: __class__._link = __class__._link(impiegato, dipartimento, data_afferenza)
-            cls.afferenza_link[l] = {'Dipartimento': dipartimento, 'Impiegati': [{'Impiegato': impiegato, 'Data afferenza': data_afferenza}]}
+            i = {'Impiegato': impiegato, 'Data Afferenza': data_afferenza}
+            d = {'Dipartimento': dipartimento, 'Impiegati': i, 'Link': [l]}
+            cls.afferenza_link.append(d)
 
     @classmethod
-    def remove_link(cls, link: _link|None = None, dipartimento: Dipartimento|None = None, impiegato: Impiegato|None = None):
-        if link in cls.afferenza_link:
-                cls.afferenza_link.pop(link)
-
-        if impiegato:
-            for x in list(cls.afferenza_link):
-                for i in cls.afferenza_link[x]['Impiegati']:
-                    if i['Impiegato'] == impiegato:
-                        cls.afferenza_link[x]['Impiegati'].remove(i)
-                        break
-
-        if dipartimento:
-            for x in list(cls.afferenza_link):
-                if cls.afferenza_link[x]['Dipartimento'] == dipartimento:
-                    cls.afferenza_link.pop(x)
-
+    def remove_link(cls, link: _link):
+        if link:
+            for x in cls.afferenza_link:
+                for y in x.get('Link'):
+                    if y == link:
+                        if not x.get('Impiegati'):
+                            cls.afferenza_link.pop(x)
+                        else:
+                            x.get('Impiegati').pop(link.impiegato())        
+                            x.get('Link').pop(link)
+                        
     class _link:
         _impiegato: Impiegato # immutabile noto alla nascita
         _dipartimento: Dipartimento # immutabile noto alla nascita
