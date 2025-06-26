@@ -1,0 +1,35 @@
+from __future__ import annotations
+from impiegato import *
+from progetto import *
+
+class res_prog:
+
+    res_prog_link: dict[res_prog._link, dict[str, Impiegato|Progetto]] = {}
+
+    @classmethod
+    def add_link(self, i: Impiegato, p: Progetto):
+        l: __class__._link = __class__._link(i, p)
+        __class__.res_prog_link[l] = {'Impiegato': i, 'Progetto': p}
+
+    @classmethod
+    def remove_link(self, l: res_prog._link):
+        if l in __class__.res_prog_link:
+            del __class__.res_prog_link[l]
+
+    class _link:
+
+        _impiegato: Impiegato # immutabile, noto alla nascita
+        _progetto: Progetto # immutabile, noto alla nascita
+
+        def __init__(self, i: Impiegato, p: Progetto):
+            self._impiegato = i
+            self._progetto = p
+
+        def impiegato(self) -> Impiegato:
+            return self._impiegato
+        
+        def progetto(self) -> Progetto:
+            return self._progetto
+        
+        def __repr__(self):
+            return f'Il responsabile {self.impiegato()} si occupa del progetto {self.progetto()}'
