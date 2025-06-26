@@ -70,3 +70,6 @@ class afferenza:
                     return False
                 
             return (self.impiegato(), self.dipartimento(), self.data_afferenza()) == (other.impiegato(), other.dipartimento(), other.data_afferenza())
+        
+        def __repr__(self):
+            return f"L'impiegato {self.impiegato().nome()} {self.impiegato().cognome()} afferisce al dipartimento {self.dipartimento().nome()} dal {self.data_afferenza()}"

@@ -53,7 +53,6 @@ class Dipartimento:
             ind_str: str = f"con sede in {self.indirizzo()}"
 
         return f"Dipartimento '{self.nome()}' {ind_str} e numeri telefono: {self.telefoni()}"
-
-
-if __name__ == "__main__":
-    pass
+    
+    def __repr__(self):
+        return f"Dipartimento {self.nome()}, indirizzo {self.indirizzo()}, numeri di teleofono {self.telefoni()}"

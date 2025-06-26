@@ -65,3 +65,6 @@ class direzione:
                     return False
                 
             return (self.impiegato(), self.dipartimento()) == (other.impiegato(), other.dipartimento())
+        
+        def __repr__(self):
+            return f"L'impieagto {self.impiegato().nome()} {self.impiegato().cognome()} dirige il dipartimento {self.dipartimento().nome()}"

@@ -14,21 +14,9 @@ class coinvolto:
         cls.coinvolto_link[l] = {'Impiegato': impiegato, 'Progetto': progetto}
         
     @classmethod
-    def remove_link(cls, link: _link|None = None, impiegato: Impiegato|None = None, progetto: Progetto|None = None):
-
-        if link:
-            for x in cls.coinvolto_link and cls.coinvolto_link():
-                cls.coinvolto_link.pop(link)
-
-        if impiegato:
-            for x in list(cls.coinvolto_link):
-                if cls.coinvolto_link[x]['Impiegato'] == impiegato:
-                    cls.coinvolto_link.pop(impiegato)
-
-        if progetto:
-            for x in list(cls.coinvolto_link):
-                if cls.coinvolto_link[x]['Progetto'] == progetto:
-                    cls.coinvolto_link.pop(progetto)
+    def remove_link(cls, link: coinvolto._link):
+        if link in cls.coinvolto_link:
+            del cls.coinvolto_link[link]
 
     class _link:
         _impiegato: Impiegato # sempre immutabile e noto alla nascita
@@ -52,3 +40,6 @@ class coinvolto:
                     return False
                 
             return (self.impiegato(), self.progetto()) == (other.impiegato(), other.progetto())
+        
+        def __repr__(self):
+            return f"{self.impiegato()} è coinvolto nei seguenti progetti {self.progetto()}"
