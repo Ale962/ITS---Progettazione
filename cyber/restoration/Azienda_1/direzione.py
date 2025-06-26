@@ -6,7 +6,7 @@ from typing import Any
 
 class direzione:
 
-    direnzione_link: list[dict[Impiegato, list[Dipartimento], list[_link]]]
+    direnzione_link: list[dict[str, Impiegato | list[Dipartimento] | list[direzione._link]]] = []
 
     @classmethod
     def add_link(cls, dipartimento: Dipartimento, impiegato: Impiegato):
@@ -17,31 +17,32 @@ class direzione:
                 
         found: bool = False
         for x in cls.direnzione_link:
-            for y in x.get('Impiegato'):
-                if y == impiegato:
-                    l: __class__._link = __class__._link(impiegato, dipartimento)
-                    ['Dipartimenti'].append({'Dipartimento': dipartimento})
-                    ['Link'].append(l)
+            if x.get('Impiegato') == impiegato:
+                l: __class__._link = __class__._link(impiegato, dipartimento)
+                x['Dipartimenti'].append(dipartimento)
+                x['Link'].append(l)
                 found = True
         if not found:
             l: __class__._link = __class__._link(impiegato, dipartimento)
-            di = {'Dipartimento': dipartimento}
-            d = {'Impiegato': impiegato, 'Dipartimento': [di], 'Link': [l]}
+            d = {'Impiegato': impiegato, 'Dipartimenti': [dipartimento], 'Link': [l]}
             cls.direnzione_link.append(d)
 
     @classmethod
     def remove_link(cls, link: _link):
         if link:
             for x in cls.direnzione_link:
-                for y in x.get('Link'):
-                    if y == link:
-                        if not x.get('Dipartimenti'):
-                            cls.direnzione_link.pop(x)
-                        else:
-                            x.get('Dipartimenti').pop(link.impiegato())        
-                            x.get('Link').pop(link)
-
-
+                y = x.get('Link')
+                for l in y:
+                    if l == link:
+                        dip = x.get('Dipartimenti')
+                        dip [:] = [d for d in dip if d != link.dipartimento()]
+                        # if link.dipartimento() in dip:
+                        #    dip.remove(link.dipartimento())
+                        if link in y:
+                            y.remove(link)
+                        if not dip:
+                            cls.direnzione_link.remove(x)
+                        
     class _link:
         _impiegato: Impiegato # immutabile noto alla nascita
         _dipartimento: Dipartimento # immutabile noto alla nascita
