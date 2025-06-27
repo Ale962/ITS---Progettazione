@@ -6,7 +6,7 @@ from typing import Any
 
 class coinvolto:
 
-    coinvolto_link: dict[_link, dict[Impiegato, Progetto]] = {}
+    coinvolto_link: dict[_link, dict[str, Impiegato | Progetto]] = {}
 
     @classmethod
     def add_link(cls, impiegato: Impiegato, progetto: Progetto):

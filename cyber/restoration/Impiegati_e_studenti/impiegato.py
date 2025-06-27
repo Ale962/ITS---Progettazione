@@ -1,11 +1,14 @@
 from custom_types import *
 from persona import Persona
+from progetto import Progetto
+from res_prog import res_prog
 
 class Impiegato(Persona):
 
     _stipendio: RealGEZ # noto alla nascita
     _ruolo: Ruolo # noto alla nascita
     _is_responsabile: bool # noto alla nascita
+    _progetti: set[tuple[res_prog._link, Progetto]]
 
     def __init__(self, stipendio: RealGEZ, ruolo: Ruolo, is_responsabile: bool, nome, cognome, cf, nascita, genere, maternita = None, posizione_militare = None):
         super().__init__(nome, cognome, cf, nascita, genere, maternita, posizione_militare)
@@ -31,5 +34,26 @@ class Impiegato(Persona):
     def is_responsabile(self) -> bool:
         return self._is_responsabile
     
+    def add_progetto(self, l: res_prog._link, progetto: Progetto) -> None:
+        if self.is_responsabile():    
+            for t in self._progetti:
+                x,y = t
+                if x == progetto:
+                    raise ValueError(f"Il progetto {progetto} è già presente")
+            else:
+                t = tuple(l, progetto)
+                self._progetti.add(t)
+
+    def remove_progetto(self, l: res_prog._link)-> None:
+        for t in self._progetti:
+            x,y = t
+            if x == l.progetto():
+                self._progetti.remove(t)
+            else:
+                raise RuntimeError(f'{l.impiegato()} non presente')
+
+    def progetti(self) -> frozenset[tuple[res_prog._link, Progetto]]:
+        return frozenset(self._progetti)
+    
     def __repr__(self):
-        return super().__repr__()+f' {self.stipendio()} {self.ruolo()}'
+        return super().__repr__()+f' stipendio: {self.stipendio()}, ruolo: {self.ruolo()}'

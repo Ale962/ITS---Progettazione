@@ -22,6 +22,7 @@ class direzione:
                 x['Dipartimenti'].append(dipartimento)
                 x['Link'].append(l)
                 found = True
+                break
         if not found:
             l: __class__._link = __class__._link(impiegato, dipartimento)
             d = {'Impiegato': impiegato, 'Dipartimenti': [dipartimento], 'Link': [l]}

@@ -10,10 +10,14 @@ class res_prog:
     def add_link(self, i: Impiegato, p: Progetto):
         l: __class__._link = __class__._link(i, p)
         __class__.res_prog_link[l] = {'Impiegato': i, 'Progetto': p}
+        i.add_progetto(l, p)
+        p.add_impiegato(l, i)
 
     @classmethod
     def remove_link(self, l: res_prog._link):
         if l in __class__.res_prog_link:
+            l.impiegato().remove_progetto(l)
+            l.progetto().remove_impiegato(l)
             del __class__.res_prog_link[l]
 
     class _link:
