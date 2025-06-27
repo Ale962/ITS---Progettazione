@@ -1,10 +1,12 @@
-from impiegato import Impiegato
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from impiegato import Impiegato
 from res_prog import res_prog
 
 class Progetto:
 
     _nome: str # Immutabile, noto alla nascita
-    _impiegati: set[tuple[res_prog._link, Impiegato]]
+    _impiegati: set[tuple[res_prog._link, 'Impiegato']]
 
     def __init__(self, nome: str):
         self._nome = nome
@@ -13,27 +15,28 @@ class Progetto:
     def nome(self) -> str:
         return self._nome
     
-    def impiegati(self) -> frozenset[res_prog._link, Impiegato]:
+    def impiegati(self) -> frozenset[res_prog._link, 'Impiegato']:
         return frozenset(self._impiegati)
 
-    def add_impiegato(self, l: res_prog._link, impiegato: Impiegato) -> None:
+    def add_impiegato(self, l: res_prog._link, impiegato: 'Impiegato') -> None:
         for t in self._impiegati:
             x,y = t
-            if x == impiegato:
+            if y == impiegato:
                 raise ValueError(f"L'impiegato {impiegato} è già presente")
         else:
-            t = tuple(l, impiegato)
-            self._impiegati.add(t)
+            tu = (l, impiegato)
+            self._impiegati.add(tu)
 
     def remove_impiegato(self, l: res_prog._link)-> None:
         for t in self._impiegati:
             x,y = t
-            if x == l.impiegato():
+            if y == l.impiegato():
                 self._impiegati.remove(t)
+                break
             else:
                 raise RuntimeError(f'{l.impiegato()} non presente')
 
-    def impiegati(self) -> frozenset[tuple[res_prog._link, Impiegato]]:
+    def impiegati(self) -> frozenset[tuple[res_prog._link, 'Impiegato']]:
         return frozenset(self._impiegati)
     
     def __repr__(self):

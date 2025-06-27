@@ -15,6 +15,7 @@ class Impiegato(Persona):
         self.set_stipendio(stipendio)
         self.set_ruolo(ruolo)
         self.set_is_responsabile(is_responsabile)
+        self._progetti = set()
 
     def set_stipendio(self, s: RealGEZ) -> None:
         self._stipendio = s
@@ -38,19 +39,20 @@ class Impiegato(Persona):
         if self.is_responsabile():    
             for t in self._progetti:
                 x,y = t
-                if x == progetto:
+                if y == progetto:
                     raise ValueError(f"Il progetto {progetto} è già presente")
             else:
-                t = tuple(l, progetto)
-                self._progetti.add(t)
+                tu = (l, progetto)
+                self._progetti.add(tu)
 
     def remove_progetto(self, l: res_prog._link)-> None:
         for t in self._progetti:
             x,y = t
-            if x == l.progetto():
+            if y == l.progetto():
                 self._progetti.remove(t)
+                break
             else:
-                raise RuntimeError(f'{l.impiegato()} non presente')
+                raise RuntimeError(f'{l.progetto()} non presente')
 
     def progetti(self) -> frozenset[tuple[res_prog._link, Progetto]]:
         return frozenset(self._progetti)

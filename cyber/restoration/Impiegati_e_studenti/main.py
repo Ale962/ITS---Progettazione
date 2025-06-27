@@ -49,3 +49,6 @@ if __name__ == '__main__':
     print("\nDopo rimozione:")
     for k, v in res_prog.res_prog_link.items():
         print(k, "->", v)
+
+    res_prog.add_link(imp, proj)
+    res_prog.add_link(imp, proj)
