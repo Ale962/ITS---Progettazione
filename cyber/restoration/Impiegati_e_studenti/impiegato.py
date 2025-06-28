@@ -1,6 +1,8 @@
 from custom_types import *
 from persona import Persona
-from progetto import Progetto
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from progetto import Progetto
 from res_prog import res_prog
 
 class Impiegato(Persona):
@@ -8,7 +10,7 @@ class Impiegato(Persona):
     _stipendio: RealGEZ # noto alla nascita
     _ruolo: Ruolo # noto alla nascita
     _is_responsabile: bool # noto alla nascita
-    _progetti: set[tuple[res_prog._link, Progetto]]
+    _progetti: set[tuple[res_prog._link, 'Progetto']]
 
     def __init__(self, stipendio: RealGEZ, ruolo: Ruolo, is_responsabile: bool, nome, cognome, cf, nascita, genere, maternita = None, posizione_militare = None):
         super().__init__(nome, cognome, cf, nascita, genere, maternita, posizione_militare)
@@ -35,14 +37,14 @@ class Impiegato(Persona):
     def is_responsabile(self) -> bool:
         return self._is_responsabile
     
-    def add_progetto(self, l: res_prog._link, progetto: Progetto) -> None:
+    def add_progetto(self, l: res_prog._link) -> None:
         if self.is_responsabile():    
             for t in self._progetti:
                 x,y = t
-                if y == progetto:
-                    raise ValueError(f"Il progetto {progetto} è già presente")
+                if y == l.progetto():
+                    raise ValueError(f"Il progetto {l.progetto()} è già presente")
             else:
-                tu = (l, progetto)
+                tu = (l, l.progetto())
                 self._progetti.add(tu)
 
     def remove_progetto(self, l: res_prog._link)-> None:
@@ -54,7 +56,7 @@ class Impiegato(Persona):
             else:
                 raise RuntimeError(f'{l.progetto()} non presente')
 
-    def progetti(self) -> frozenset[tuple[res_prog._link, Progetto]]:
+    def progetti(self) -> frozenset[tuple[res_prog._link, 'Progetto']]:
         return frozenset(self._progetti)
     
     def __repr__(self):

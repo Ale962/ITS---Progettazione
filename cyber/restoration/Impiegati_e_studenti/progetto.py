@@ -15,16 +15,16 @@ class Progetto:
     def nome(self) -> str:
         return self._nome
     
-    def impiegati(self) -> frozenset[res_prog._link, 'Impiegato']:
+    def impiegati(self) -> frozenset[tuple[res_prog._link, 'Impiegato']]:
         return frozenset(self._impiegati)
 
-    def add_impiegato(self, l: res_prog._link, impiegato: 'Impiegato') -> None:
+    def add_impiegato(self, l: res_prog._link) -> None:
         for t in self._impiegati:
             x,y = t
-            if y == impiegato:
-                raise ValueError(f"L'impiegato {impiegato} è già presente")
+            if y == l.impiegato():
+                raise ValueError(f"L'impiegato {l.impiegato()} è già presente")
         else:
-            tu = (l, impiegato)
+            tu = (l, l.impiegato())
             self._impiegati.add(tu)
 
     def remove_impiegato(self, l: res_prog._link)-> None:
