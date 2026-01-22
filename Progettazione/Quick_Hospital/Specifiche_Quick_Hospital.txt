@@ -1,0 +1,76 @@
+wer+++++++++++++++++++++
+- Specifiche delle classi
+
+-- Classe Letto:
+Operazione disponibilità(istante: DataOra): bool
+	precondizioni: nessuna
+	post_condizioni:
+		il risultato result è così definito:
+			per ogni elemento r: Ricovero tale che sia coinvolto in un link (this, r): ric_letto
+				se istante > r.data_dimissione
+				il risultato è uguale a True
+
+				altrimenti il risultato è False	
+
+
+-- [v.Ricovero.non_ricovero_dopo_data_accettazione] non esiste una data_accettazione di ricovero successiva a una data_dimissione
+Per ogni elemento r: Ricovero, p: Paziente tale che (p, r): paz_ric, non esiste (r, p) tale che r.data_accettazione > r.data_dimissione
+
+-- [v.Medico.in_cura] non esiste un m: Medico uguale a un p: Paziente coinvolti in link (m, r): in_cura, e (r, p): paz_ric
+Per ogni elemento m: Medico coinvolto in un link con istanze r: Ricovero (m, r): in_cura, e r coinvoloto con istanze p: Paziente in link (r, p): paz_ric, non esiste m = p
+
+- Specifiche Use Case:
+
+-- Operazione Medici_Idonei(pres: Prestazione): Medico[1..*]
+	precondizione:
+		nessuna
+	post condizione:
+		- l'operazione non modifica il livello estenzionale dei dati
+		- il risultato result è così definito:
+			
+			Sia Mprim l'insieme degli oggetti m: Medico e esistano spec: Specializzazione tali che esistano i seguenti link:
+				a. (pres, spec): richiede
+				b. (spec, m): primaria
+				
+			Sia Msec l'insieme deglie oggetti m: Medico e esistano spec: Specializzazione tale che esistano i seguenti link:
+				a. (pres, spec): richiede
+				b. (spec, m): secondaria
+				
+			Se Mprim non è vuoto, Il risulato result è uguale a Mprim
+			
+			Altrimenti il risultato result è uguale a Msec
+			
+-- Operazione Storico_Paziente(p: Paziente): Ricovero[1..*]
+	precondizione: nessuna
+	post condizione:
+		- l'operazione non modifica il livello estenzionale dei dati:
+		- il risultato result è così definito:
+			
+			Sia R l'isieme degli oggetti r: Ricovero tale che esista il link (p, r): paz_ric
+			
+			il risultato è uguale a R
+			
+-- Operazione Calcolo_Percorso(m: Medico):
+
+	precondizione:
+		esista almeno un elemento r: Ricovero che formi almeno un link (m, r): in_cura
+		
+	post condizioni:
+		- l'operazione non modifica il livello estenzionale dei dati:
+		- il risultato result è così definito:
+		
+		Sia S l'insieme l'insieme degli elementi s: Stanza e esista l: Letto tale che esistano:
+			a. (r, l): ric_letto
+			b. (l, s): letto_stanza
+			
+		Il risultato result è S
+		
+-- Operzione Accettazione(p: Paziente): Ricovero
+	
+	precondizione:
+		sia L l'insieme degli oggetti l: Letto, esiste almeno un elemento l tale che l.disponibilità(adesso) == True
+	
+	post condizione:
+		- l'operazione modifica il livello estensionale dei dati
+		- il risultato result è così definito:
+			Viene creato un nuovo oggetto r:Ricovero tale che r.inizio = adesso e il link (r, p):paz_ric, e il link (r, l): ric_letto	

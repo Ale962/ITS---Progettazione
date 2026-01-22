@@ -1,0 +1,39 @@
+Specifiche Classi:
+	
+	-- Classe Prenotazione:
+
+		- Operazione is_confermata(): bool
+
+			precondizione:
+				nessuna
+
+			post condizione:
+				Il risultato è cosi definito:
+
+					se è confermata il risultato è uguale a TRUE
+
+					altrimenti è FALSE
+
+
+
+	-- Classe Promozione:
+
+		- Operazione massimo_numero(n: intero): bool
+
+			precondizione:
+				nessuna
+
+			post condizione:
+				il risultato è così definito:
+
+					sia P l'insieme degli elementi p:Prenotazione tali che (this, p): prenotazione_promozione
+
+					NP è uguale alla cardinalità di P
+
+					Se NP < n il risultatop è uguale a FALSE
+
+					altrimenti è TRUE
+
+		[v.Promozione.Inizio_minore_fine] Una promozione non puo avere una data inizio maggiore di una data di fine
+
+		per ogni elemento pm: Promozione non può esistere un elemento pm tale che pm.data_inizio > pm.data_fine

@@ -1,0 +1,36 @@
+Specifiche dell' Use-Case:
+
+- Operazione Registrazione(nome: stringa, cognome, cf: cf): Persona
+	
+	precondizione:
+		sia P l'insieme degli oggetti p: Persona, non deve esistere nessun p.cf = cf
+
+	post condizione:
+		- l'operazione modifica il livello estensionale dei dati
+		- il risultato è cosi definito:
+			Si crea un nuovo oggetto della classe P con:
+				p.nome = nome
+				p.cognome = cognome
+				p.cf = cf
+
+- Operazione Prenotazione(spet: Spettacolo, p: Persona[1..*], fila: intero >= 0[1..*], colonna: intero >= 0[1..*]): PostoOccupato[0..*]
+
+	precondizioni:
+		sia s: Sala tale che esista (spet, s): sala_spettacolo, sia s.disponibilità(adesso) == TRUE
+
+	post condizioni:
+		- l'operazione modifica il livello estensionale dei dati
+		- il risultato è così definito:
+
+			Sia p: Posto tale che esista(p, s): posto_sala se:
+
+				- p.fila = fila
+				- p. colonna = colonna
+				- e p non sia istanza di PostoOccupato
+
+			si torna p come istanza della classe PostoOccupato e si crea un link (p,b): biglietto_persona
+
+- Operazione Consultare()
+
+
+- Operazione Ricerca_per_categoria(c: Categoria): Spettacolo[0..*]

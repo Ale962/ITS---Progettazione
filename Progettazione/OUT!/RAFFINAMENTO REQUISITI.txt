@@ -1,0 +1,49 @@
+RAFFINAMENTO REQUISITI
+
+1. Sede:
+	1.1 nome: str
+	1.2 indirizzo: str
+	1.3 [link citta - regione etc.]
+	1.4 tipo: str
+
+2. Sala:
+	2.1 tipo: str
+	2.2 operazione: posti_totali()
+	2.3 operazione: posti_disponibili()
+	2.4 operazione: disponibilità(adesso)
+
+3. Posto:
+	3.1 fila: inter >= 0
+	3.2 colonna: intero >= 0
+
+4. Spettacolo:
+	4.1 titolo: str
+	4.2 data: Data
+	4.3 [link sede] (necessario mantenere traccia delle sale oltre che delle sedi, si accede comunque da sede)
+	4.4 orario_inizio: Ora
+	4.5 orario_fine: Ora
+	
+5. Tipologia:
+	5.1 nome: str {id}
+
+6. Genere:
+	6.1 nome: str {id}
+	
+8. Persona:
+	8.1 nome: str
+	8.2 Cognome: str
+	8.3 cf: cf {id}
+	8.4 [link artista con spettacolo] {v. req. 2}
+	8.5 [link prenota con biglietto] {v. req. 9}
+
+9. Biglietto:
+	9.1 data_acqusto: DataOra
+	9.2 prezzo: reale >= 0
+	9.3 [link posto occupato]
+
+10. Biglietto Ridotto:
+	(sotto classe Biglietto)
+	9.1 prezzo: reale
+
+11. Posto_Occupato:
+	(sotto classe Posto)

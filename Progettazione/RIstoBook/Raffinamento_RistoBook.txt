@@ -1,0 +1,31 @@
+Raffinamento
+
+1. Cliente:
+	1.1 nome: str
+	1.2 email: str
+
+2. Ristorante: 
+	2.1 nome: str
+	2.2 p.iva: stringa {id}
+	2.3 indirizzo: indirizzo [Ciità, Regione, Nazione]
+
+3. TipoCucina:
+	nome: str {id}
+
+4. Prenotazione:
+	4.1 giorno: DataOra
+	4.2 +is_confermata(): bool
+
+5. Rifiutata:
+	5.1 (sotto classe Prenotazione)
+
+6. Promozioni:
+	6.1 percentuale_sconto: intero
+	6.2 data_inizio: DataOra
+	6.3 data_fine: DataOra
+	6.4 [link tipo_promozione] [v. req. 4]
+	6.5 [link promo_ristorante] [v. req. 1]
+	6.6 + massimo__numero_clienti_raggiunto(numero: intero): bool
+
+7. Iutilizzata:
+	7.1 (sotto classe Prenotazione)

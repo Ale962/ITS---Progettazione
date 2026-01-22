@@ -1,0 +1,118 @@
+- Specifiche Classi
+
+
+-- Classe Utente:
+
+
+	[V.Utente.Visualizza_dopo_iscrizione] 
+	
+		L' utente non può visualizzare un video prima di essersi registrato.
+		
+		Per ogni elemento u: Utente e v: Visualizzazione non può esistere (u, v): visualizzazione_utente tale che u.data_iscrizione > v.istante
+		
+		
+	
+	[V.Utente.Commento_dopo_iscrizione] 
+	
+		L' utente non può commetare un video prima di essersi registrato.
+		
+		Per ogni elemento u: Utente e c: Commento non può esistere (u, c): commento_utente tale che u.data_iscrizione > c.istante
+		
+		
+	
+	[V.Utente.Non_vota_se_stesso] 
+	
+		L' utente non può lasciare una valutazione a un video publicato da se stesso.
+		
+		Per ogni elemento u: Utente e v: Video se esiste (u, v): pubblica non esiste (u, v): valutazione.
+		
+		
+	
+	[V.Utente.Commenta_se_visualizzato] 
+	
+		L'utente può commentare se ha visualizzato il video
+		
+		Per ogni elemento u: Utente e vis: Visualizzazione sia c: Commento e v: Video tale che:
+	
+		- (u, vis): visualizzazione_utente  
+		- (vis, v): vis_vid 
+		- (c, v): video_commento
+		
+		esiste (u, c): commento_utente se e solo se esiste il link (u, vis)
+		
+		
+
+-- Classe Video:
+	
+	+Operazione numero_visualizzazione(adesso): intero >= 0
+		
+		precondizione: 
+			nessuna
+		
+		post condizioni:
+			Il risultato result è così definito:
+				
+				Sia Vis l'inieme degli elementi vis: Visualuzzazione tale che esista il link (this, vis): vis_vid
+				
+				Il risultato è uguale alla cardinalità di Vis
+		
+	
+- Specifiche Use_Case:
+
+	Operazione Registrazione(nome: stringa, adesso): Utente
+		
+		precondizione:
+			Sia U l'insieme degli u: Utente, non deve esistere un u.nome = nome
+			
+		post condizione:
+			- l'operazione modifica il livello estensionale dei dati
+			- il risultato è così definito:
+				Sia crea una nuova istanza di u: Utente tale che:
+					 - u.nome = nome
+					 - u.data_iscrizione = adesso
+					 
+					 
+					 
+	Operzaione Ausiliaria: Calcolo_Media(v: Video): Reale >= 0
+					
+		precondizione:				 
+			esista almeno un link (u, v): valutazione
+		
+		post condizione:
+			Il risultato è cosi definito:
+				sia Val l'insieme dei link (u, v): valutazione
+				sia S la somma di tutti (u, v).voto in Val
+				sia N = cardinalità Val
+			Il risultato è uguale a S/N
+					
+	
+	Operazione Ricerca_video_avanzata(voto: intero in [0..5], c: Categoria, T: Tag[1..*]): Video[0..*]
+	
+		precondizioni:
+			nessuna
+		
+		post condizioni:
+			- l'operazione modifica il livello estensionale dei dati
+			- il risultato è così definito:
+				
+				Sia V l'insieme degli elementi v: Video tali che:
+					
+					a. Calcolo_Media(v) >= voto
+					b. esiste il link (v, c): categoria_video
+					c. esista almeno un link (v, t): tag_video tale che t sia appartenente a T
+					
+				Il risultato è uguale a V
+				
+	Operazione Ricerca_semplice(c: Categoria): Video[0..*]
+	
+		precondizione:
+			nessuna
+		
+		post condizione:
+			- l'operazione modifica il livello estensionale dei dati
+			- il risultato è così definito:
+			
+				Sia V l'insieme degli elementi v: Video tali che:
+					esiste il link (v, c): categoria_video
+					
+				Il risultato è uguale a V

@@ -1,0 +1,65 @@
+Specifiche delle classi:
+
+- Classe Sala:
+	
+	-- Operazione posti_totali(): intero >= 0
+
+		precondizioni:
+			nessuna
+
+		post condizioni:
+			- il risultato result è così definito:
+
+				sia P l'insieme degli oggeti p: Posto tali che esista (p, this): posto_sala
+
+				Il risultato result è uguale alla cardinalità dell'insieme P
+
+	-- Operazione posti_disponibili(): intero >= 0
+
+		precondizioni:
+			nessuna
+
+		post condizioni:
+			- il risultato result è così definito:
+
+				sia P l'insieme degli oggeti p: Posto tali che esista (p, this): posto_sala e p non sia istanza di Posto Occupato
+
+				Il risultato result è uguale alla cardinalità dell'insieme P
+
+	-- Operazioni disponibilità(adesso): bool
+
+		precondizioni:
+			nessuna
+
+		post condizioni:
+			il risultato resul è così definito:
+
+				se this.posti_disponibili() > 0 il risultato è uguale a TRUE
+
+				altrimenti il risultato è FALSE
+
+	[v.Sala.No_più_Spettacoli_in_contemporaneo] Non possono esserci due spettacoli nella stessa sala allo stesso momento
+
+	Per ogni s: Sala siano spet1: Spettacolo e spet2: Spettavolo, non possono esistere (s, spet1): sala_spettacolo e (s, spet2): sala_spettacolo se:
+		- spet1.data = spet2.data
+		- spet1.orario_inizio = spet2.orario_inizio
+		- spet1.orario_fine = spet2.orario_fine
+		- spet1.orario_inizio < spet2.orario_inizio < spet1.orario_fine
+
+- Classe Biglietto:
+
+	[v.Biglietto.Data_Acquisto_Dopo_Spettacolo] non si può acquistare un biglietto dopo data dello spettacolo
+
+	Per ogni elemento b: Biglietto, sia s: Spettacolo tale che (s, b): biglietto_spettacolo, non può esistere b tale che:
+		a. b.data_acquisto > s.data
+		b. b.data_acquisto > s.orario_fine
+
+- Class Spettacolo:
+	
+	[v.Spettacolo.Orario_Inizio_maggiore_Orario_Fine] Non può esistere un spettacolo che abbia un orario di inizio maggiore dell'orario di fine
+
+	Per ogni elemento s: Spettacolo, non esiste un elemento dove s.orario_inizio > s.orario_fine
+
+	[v.Spettacolo.Sempre_Stessa_Sede] Uno spettacolo può essere eseguito solo nella stessa sede
+
+	Per ogni elemento s: Spettacolo, sia sa: Sala tale che esista (s, sa): sala_spettacolo e esista se: sede tale che (sa, se): sala_sede, non può esistere un link (s, sa) se sa è coinvolto in un link con una diversa istanza di Sede

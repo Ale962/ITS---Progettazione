@@ -1,0 +1,89 @@
+Specifiche Use_Case:
+
+-- Operazione Ricerca_Ristorante(x: Città, C: TipologiaCucina[1..*], s: intero, d: data): Ristoranti[0..*]
+
+	precondizioni:
+		nessuna
+
+	post condizioni:
+		- l'operazione non modifica il livello estensionale dei dati
+		- il risultato result viene così definito:
+
+			sia R un insieme degli elementi r: Ristorante
+			tale che:
+
+				a. esista il link (x, r): ristorante_città
+				b. per ogni elemento di C c: TipologiaCucina esista il link (c, r): ristorante_cucina
+				c. sia PR l'insieme degli elementi pr: Promozione tale che:
+					i. esista il link (pr, r): promozione_ristorante
+					ii. pr.percentuale_sconto >= s
+					iii. pr.data_inizio <= d < pr.data_fine
+
+			Il risultato è uguale a R
+
+
+-- Operazione Calcolo_Statistiche(data_inizio: DataOra, data_fine: DataOra, pm: Promozione): reale
+
+	precondizioni:
+		nessuna
+
+	post condizioni:
+		- l'operazione non modifica il livello estensionale dei dati
+
+		- il risultato è così definito:
+
+			Sia PM l'insieme delle istanza pm tali che:
+
+				a. data_inizio <= pm.data_inizo < pm.data_fine <= data_fine
+
+			Sia PR l'insieme dei pr: Prenotazione tale che:
+				a. esiste il link (pr, pm): promozione_prenotazione con almeno un elemento di PM
+
+
+			N =  |PR| / |PM|
+
+			Il risultato è uguale a N
+
+
+-- Operazione Ausiliaria calcolo_prenotazioni(pm: Promozione): intero
+	
+	precondizione:
+		nessuna
+
+	post condizione:
+		- l'operazione non modifica il livello estensionale dei dati
+		- il risultato è così definito:	
+			
+			sia PR l'insieme degli elementi pr: Prenotazione tale che (pr, pm): prenotazione_promozione
+
+			Il risultato è |PR|
+
+
+
+-- Operazione Calcolo_statistiche()
+
+
+
+-- Operazione Rifiutata(pr: Prenotazione): PrenotazioneRifiutata
+
+	precondizioni:
+		adesso < pr.giorno
+
+	post condizione:
+		- l'operazione modifica il livello estensionale dati
+		- il risultato è così definito:
+
+			imposto pr.is_accettata = FALSE
+			pr diventa istanza di PrenotazioneRifiutata
+
+-- Operazione Annullata(pr: Prenotazione): PrenotazioneAnnullata
+
+	precondizione:
+		adesso < pr.giorno
+
+	post condizione:
+		- l'operazione modifica il livello estensionale dei dati
+		- il risultato è così definito:
+
+			imposto pr.is_confermata = FALSE
+			pr diventa istanza di PrenotazioneAnnullata
