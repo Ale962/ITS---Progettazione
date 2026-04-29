@@ -1,0 +1,9 @@
+DNS
+
+	Regole del DNS
+
+		A: Si trovano i domini e il loro IP tramite l'uso del nome o della chiocciola seguito dall'IP
+		AAA: SI usa per ipv6
+		MX: email
+		TXT: indicazioni sulle police dell'invio delle email
+		

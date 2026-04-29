@@ -1,0 +1,27 @@
+1.Docenti:
+	1.1 nome
+	1.2 cognome
+	1.3 luogo , data di nascita
+	1.4 matricola
+	1.5 posizione universitaria
+	
+2. Progetti:
+	2.1 nome
+	2.2 acronimo
+	2.3 data inizip
+	2.4 data fine
+	2.5 docenti che partecipano (link docenti)
+	
+3. Work Package:
+	3.1 nome
+	3.2 data inizio
+	3.3 data fine
+	
+4. Impegni:
+	4.1 data
+	4.2 durata
+	4.3 tipologia:
+		4.3.1 assenza (malattia, chiusura universataria, gravidanza, etc.)
+		4.3.2 impegni istituzionali (didattica, ricerca, missione, consiglio di dipartimento, etc.)
+		4.3.3 impegni progettuali (Ricerca e Sviluppo, Dimostrazione, Management, etc)
+		

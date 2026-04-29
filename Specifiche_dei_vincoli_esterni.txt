@@ -1,0 +1,8 @@
+Specifiche dei vincoli esterni
+
+
+[V.Utente.pubblDopoRegistrazione] Un utente non può avere un post pubblicato prima della sua data di registrazione
+
+Non può esistere un p: PostOggetto e un u: Utente che forma l'associazione (u, p):ut_po con u.registrazione > p.pubblicazione
+
+

@@ -34,6 +34,24 @@ Specifiche Classi:
 
 					altrimenti è TRUE
 
+
+		- Operazione numero_utilizzi(): intero
+
+			precondizione:
+				nessuna
+
+			post condizioni:
+				il risultato result è così definito:
+					sia PR l'insieme degli oggetti pr: Prenotazione tale che (this, pr): prenotazione_promozione
+
+				Il risultato result è uguale a |PR|
+
+
 		[v.Promozione.Inizio_minore_fine] Una promozione non puo avere una data inizio maggiore di una data di fine
 
 		per ogni elemento pm: Promozione non può esistere un elemento pm tale che pm.data_inizio > pm.data_fine
+
+
+Vincoli Esterni:
+	
+	

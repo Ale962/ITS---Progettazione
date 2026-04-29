@@ -21,7 +21,7 @@ Specifiche Use_Case:
 
 			Il risultato è uguale a R
 
-
+# SOLUZIONE 1 OPERAZIONE CALCOLO STATISTICHE
 -- Operazione Calcolo_Statistiche(data_inizio: DataOra, data_fine: DataOra, pm: Promozione): reale
 
 	precondizioni:
@@ -44,7 +44,7 @@ Specifiche Use_Case:
 
 			Il risultato è uguale a N
 
-
+# SOLUZIONE 2 CALCOLO TRAMITE UTILIZZO DI OPERAZIONI AUSILIARE
 -- Operazione Ausiliaria calcolo_prenotazioni(pm: Promozione): intero
 	
 	precondizione:
@@ -62,7 +62,7 @@ Specifiche Use_Case:
 
 -- Operazione Calcolo_statistiche()
 
-
+# SOLUZIONE 3 CALCOLO STATISTICHE TRAMITE UTILIZZO DI OPERAZIONE DI CLASSE
 
 -- Operazione Rifiutata(pr: Prenotazione): PrenotazioneRifiutata
 
